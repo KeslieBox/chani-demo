@@ -1,10 +1,13 @@
 import React, {useEffect, useState} from 'react'
-import {View, Image, Text} from 'react-native'
+import {View, Image, Text, StyleSheet} from 'react-native'
+import {useDimensions, useDeviceOrientation} from '@react-native-community/hooks'
 
 
 export default function Gifs() {
     const url = 'https://api.giphy.com/v1/gifs/trending?api_key=fFzwj74JLAfe0WHrhCAKTC6suFdSj5nH&limit=25&rating=g'
     const [latestGifs, setLatestGifs] = useState([])
+    const { landscape } = useDeviceOrientation()
+    const { screen } = useDimensions()
 
     const getGifs = async() => {
         const resp = await fetch(url)
@@ -14,14 +17,16 @@ export default function Gifs() {
         setLatestGifs(sortedByDate.slice(0,5))
     }
 
-    const gifs = latestGifs.map(gif => {
+    const gifs = latestGifs.map((gif, index) => {
         return (
             <Image
+                key={index}
                 source={{
+                    width: landscape ? screen.width * .7 : screen.width * .9,
+                    height: landscape ? screen.height * .8 : screen.height * .3,
                     uri: gif.images.original.url,
-                    width: 600,
-                    height: 300
                 }}
+                // style={styles.gif}
             />
         )
     })
@@ -31,8 +36,14 @@ export default function Gifs() {
     }, [])
 
     return(
-        <View>
-            {gifs}
-        </View>
+        <>{gifs}</>
     )
 }
+
+const styles = StyleSheet.create({
+    gif: {
+        resizeMode: 'cover',
+        width: '100%',
+        height: '100%',
+    },
+})
