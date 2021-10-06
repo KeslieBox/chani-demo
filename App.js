@@ -7,6 +7,7 @@ export default function App() {
     <ScrollView>
       <SafeAreaView style={styles.container}>
         <View style={styles.gifs}>
+          <Text>Hello I'm making some changes!!!</Text>
           <Gifs/>
         </View>
       </SafeAreaView>
